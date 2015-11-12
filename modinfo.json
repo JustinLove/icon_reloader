@@ -6,7 +6,7 @@
   "date": "2015/11/12",
   "description": "Provides limited support for shadowed strategic icons in server mods.",
   "display_name": "Icon Reloader",
-  "forum": null,
+  "forum": "https://forums.uberent.com/threads/rel-server-icon-reloader.70911/",
   "identifier": "com.wondible.pa.icon_reloader",
   "scenes": {
     "live_game": [
@@ -15,6 +15,6 @@
     ]
   },
   "signature": "not yet implemented",
-  "version": "0.1.0"
+  "version": "1.0.0"
 }
 
