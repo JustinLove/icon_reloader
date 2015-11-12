@@ -1,0 +1,20 @@
+{
+  "author": "wondible",
+  "build": "89755",
+  "category": ["framework", "strategic-icons"],
+  "context": "server",
+  "date": "2015/11/12",
+  "description": "Provides limited support for shadowed strategic icons in server mods.",
+  "display_name": "Icon Reloader",
+  "forum": null,
+  "identifier": "com.wondible.pa.icon_reloader",
+  "scenes": {
+    "live_game": [
+      "coui://ui/mods/icon_reloader/atlas_message.js",
+      "coui://ui/mods/icon_reloader/live_game.js"
+    ]
+  },
+  "signature": "not yet implemented",
+  "version": "0.1.0"
+}
+
