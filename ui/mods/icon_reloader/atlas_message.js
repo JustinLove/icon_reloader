@@ -53,60 +53,72 @@
   }
 
   var mailboxes = {}
-  var debugMessage = function(page, method, params) {
-    if (!page) return
+  var Mailbox = function(pageid) {
+    if (mailboxes[pageid]) return mailboxes[pageid]
 
-    mailboxes[page.id] = mailboxes[page.id] || {messages: [], pending: 0}
-    var mb = mailboxes[page.id]
+    this.pageid = pageid
+    this.messages = []
+    this.pending = 0
+    mailboxes[pageid] = this
+    return this
+  }
 
-    mb.messages.push(JSON.stringify({
+  Mailbox.prototype.flush = function() {
+    while (this.messages.length > 0) {
+      this.pending++
+      this.ws.send(this.messages.shift())
+    }
+  }
+  Mailbox.prototype.send = function(method, params) {
+    this.messages.push(JSON.stringify({
       id: 0,
       method: method,
       params: params
     }))
-
-    var ws
-    if (mb.ws) {
-      ws = mb.ws
-
-      if (ws.readystate == 1) {
-        while (mb.messages.length > 0) {
-          mb.pending++
-          ws.send(mb.messages.shift())
-        }
-      }
+    if (this.ws && this.ws.readystate == 1) {
+      this.flush()
+    }
+  }
+  Mailbox.prototype.receive = function(message) {
+    if (message && message.data) {
+      //console.log('data', JSON.parse(message.data).result)
     } else {
-      ws = mb.ws = new WebSocket('ws://127.0.0.1:9999/devtools/page/' + page.id);
-      ws.onmessage = function(message) {
-        //console.log('message')
-        if (message && message.data) {
-          //console.log('data', JSON.parse(message.data).result)
-        } else {
-          //console.log('message', message)
-        }
-        mb.pending--
-        if (mb.pending < 1) {
-          ws.close()
-          mb.ws = null
-        }
-      }
-      ws.onerror = function(error) {
-        console.error('error', error);
-        ws.close()
-        mb.ws = null
-      }
-      ws.onopen = function() {
-        //console.log('open')
+      //console.log('message', message)
+    }
+    this.pending--
+    if (this.pending < 1 && this.messages.length < 1) {
+      this.close()
+    }
+  }
+  Mailbox.prototype.close = function() {
+    this.ws.close()
+    this.ws = null
+  }
 
-        while (mb.messages.length > 0) {
-          mb.pending++
-          ws.send(mb.messages.shift())
-        }
-      }
-      ws.onclose = function() {
-        //console.log('close')
-        mb.ws = null
-      }
+  var debugMessage = function(page, method, params) {
+    if (!page) return
+
+    var mb = new Mailbox(page.id)
+    mb.send(method, params)
+
+    if (mb.ws) return
+
+    ws = mb.ws = new WebSocket('ws://127.0.0.1:9999/devtools/page/' + page.id);
+    ws.onmessage = function(message) {
+      //console.log('message')
+      mb.receive(message)
+    }
+    ws.onerror = function(error) {
+      console.error('error', error);
+      mb.close()
+    }
+    ws.onopen = function() {
+      //console.log('open')
+      mb.flush()
+    }
+    ws.onclose = function() {
+      //console.log('close')
+      mb.ws = null
     }
   }
   var close = function() {
