@@ -43,13 +43,6 @@ Unfortunately, custom shaders in server mods are not loaded.
 Setting custom icons breaks the 'live' connection to the icon atlas. It limits us to one update, and will break mods which depend on this feature (Strategic Filters)
 
 Units created before icon replacement (and freeze) will be stuck with blips.
-
-## Future Work
-
-Have HodgePodge issue the icon requests.
-
-Provide a way to release icons to the unused pool.
-
 ## Technical Details
 
 In-between games, you can do almost anything. However this isn't very useful to server mods, which can only operate during a game.
