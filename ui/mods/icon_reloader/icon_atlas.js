@@ -40,16 +40,11 @@
     model.strategicIcons.notifySubscribers()
   }
 
-  handlers.replace_icons = function(map) {
-    model.strategicIcons(model.strategicIcons().map(function(icon) {
-      var newIcon = map[icon]
-      if (newIcon) {
-        delete map[icon]
-        return newIcon
-      } else {
-        return icon
-      }
-    }))
+  handlers.release_icons = function(icons) {
+    // can't release things aren't in use
+    icons = _.intersection(icons, model.strategicIcons())
+
+    model.unusedIcons = _.union(model.unusedIcons, icons)
   }
 
   handlers.update_and_freeze_icon_changes = function() {
