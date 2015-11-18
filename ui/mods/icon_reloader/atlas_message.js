@@ -52,44 +52,70 @@
     debugMessage(page, 'Runtime.evaluate', {expression: expression})
   }
 
-  var ws
+  var mailboxes = {}
   var debugMessage = function(page, method, params) {
     if (!page) return
 
-    ws = new WebSocket('ws://127.0.0.1:9999/devtools/page/' + page.id);
-    ws.onmessage = function(message) {
-      //console.log('message')
-      if (message && message.data) {
-        //console.log('data', JSON.parse(message.data).result)
-      } else {
-        //console.log('message', message)
-      }
-      ws.close()
-      ws = null
-    }
-    ws.onerror = function(error) {
-      console.error('error', error);
-      ws.close()
-      ws = null
-    }
-    ws.onopen = function() {
-      //console.log('open')
+    mailboxes[page.id] = mailboxes[page.id] || {messages: [], pending: 0}
+    var mb = mailboxes[page.id]
 
-      ws.send(JSON.stringify({
-        id: 0,
-        method: method,
-        params: params
-      }))
-    }
-    ws.onclose = function() {
-      //console.log('close')
-      ws = null
+    mb.messages.push(JSON.stringify({
+      id: 0,
+      method: method,
+      params: params
+    }))
+
+    var ws
+    if (mb.ws) {
+      ws = mb.ws
+
+      if (ws.readystate == 1) {
+        while (mb.messages.length > 0) {
+          mb.pending++
+          ws.send(mb.messages.shift())
+        }
+      }
+    } else {
+      ws = mb.ws = new WebSocket('ws://127.0.0.1:9999/devtools/page/' + page.id);
+      ws.onmessage = function(message) {
+        //console.log('message')
+        if (message && message.data) {
+          //console.log('data', JSON.parse(message.data).result)
+        } else {
+          //console.log('message', message)
+        }
+        mb.pending--
+        if (mb.pending < 1) {
+          ws.close()
+          mb.ws = null
+        }
+      }
+      ws.onerror = function(error) {
+        console.error('error', error);
+        ws.close()
+        mb.ws = null
+      }
+      ws.onopen = function() {
+        //console.log('open')
+
+        while (mb.messages.length > 0) {
+          mb.pending++
+          ws.send(mb.messages.shift())
+        }
+      }
+      ws.onclose = function() {
+        //console.log('close')
+        mb.ws = null
+      }
     }
   }
   var close = function() {
-    if (ws) {
-      ws.close()
-    }
+    mailboxes.forEach(function(mb) {
+      if (mb.ws) {
+        mb.ws.close()
+        mb.ws = null
+      }
+    })
   }
 
   window.atlasMessage = window.atlasMessage || {}
