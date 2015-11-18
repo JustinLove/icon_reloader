@@ -21,15 +21,16 @@
   model.resetCustomIcons = function() {
     model.strategicIcons(model.stockStrategicIcons.slice(0))
     model.unusedIcons = model.iconPool.slice(0)
-    handlers.reload_icons()
   }
 
   handlers.request_icons = function(icons) {
+    // requested something from our pool
+    model.unusedIcons = _.difference(model.unusedIcons, icons)
+    // already there
+    icons = _.difference(icons, model.strategicIcons())
+
     while (icons.length > 0 && model.unusedIcons.length > 0) {
       var to = icons.shift()
-      if (model.strategicIcons().indexOf(to) != -1) {
-        continue
-      }
       var from = model.unusedIcons.shift()
       console.log('replacing', from, to)
       var i = model.strategicIcons().indexOf(from)
