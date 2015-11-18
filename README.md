@@ -2,17 +2,53 @@
 
 Provides limited support for shadowed strategic icons in server mods.
 
+By itself, issues a refresh at the start and end of a game.
+
+The mod also supports requests to reallocate the unused icons to new icon ids. It currently considers nine icons unused, so nine custom icons can be requsted, after which further requests will be ignored.
+
+## Bare interface
+
+This will likely be driven by HodgePodge soon.
+
+    if (atlasMessage) {
+      atlasMessage.message('icon_atlas', 'release_icons', ['nuke_launcher', 'anti_nuke_launcher', 'nuke_launcher_ammo', 'anti_nuke_launcher_ammo'])
+      atlasMessage.message('icon_atlas', 'request_icons', ['baboom', 'titan_gantry'])
+      setTimeout(function() {
+        atlasMessage.message('icon_atlas', 'update_and_freeze_icon_changes')
+      }, 1000)
+    }
+
+The timeout leaves room for other mods to request icons. The reason is that we can only do this once: as soon as the feeze command is executed, no further updates to the icon atlas are recognized by the engine during the course of the current game.
+
+## Unused Icons
+
+Allocated in the order listed. If you intend to use one of the icons, issuing a `request_icons` will remove it from the unused pool without changing the atlas.
+
+-`commander` // two entries, second is used by game
+-`energy_storage_adv`
+-`metal_storage_adv`
+-`tank_lava`
+-`paratrooper`
+-`tutorial_titan_commander`
+-`metal_spot_preview`
+-`avatar`
+-`deep_space_radar`
+
 ## Limits
 
 There must be the stock number of strategic icons, which limits you to 121 (as of 89755)
 
-Presently the icon names must be vanilla.  You can use the unit `si_name` property to set the icon without renaming the unit, see `base_commander` for an example.
-
 Unfortunately, custom shaders in server mods are not loaded.
+
+Setting custom icons breaks the 'live' connection to the icon atlas. It limits us to one update, and will break mods which depend on this feature (Strategic Filters)
+
+Units created before icon replacement (and freeze) will be stuck with blips.
 
 ## Future Work
 
-The mod may in the future manage the handful of unused icons on behalf of piecemeal unit mods. However, this is dicey and conflicts with certain mods (e.g. Strategic Filters); see below.
+Have HodgePodge issue the icon requests.
+
+Provide a way to release icons to the unused pool.
 
 ## Technical Details
 

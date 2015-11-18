@@ -7,7 +7,7 @@
   }
 
   model.iconPool = [
-    'commander', // two entries, second is used
+    'commander', // two entries, second is used by game
     'energy_storage_adv',
     'metal_storage_adv',
     'tank_lava',
