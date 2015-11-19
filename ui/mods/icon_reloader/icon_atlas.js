@@ -56,14 +56,29 @@
     $('img').attr('src', function(i, v) {
       return v.split('?')[0] + '?' + Date.now().toString()
     })
+    deferIconList()
   }
 
+  var pendingIconList
   var sendIconListLater = function() {
-    setTimeout(function() {
+    if (pendingIconList) {
+      clearTimeout(pendingIconList)
+    }
+    pendingIconList = setTimeout(function() {
+      pendingIconList = null
       console.log('sending icons, no more changes will be reflected')
       model.sendIconList()
     }, 2000)
   }
+
+  // reset timer to ensure page has time to load and repaint
+  var deferIconList = function() {
+    if (pendingIconList) {
+      sendIconListLater()
+    }
+  }
+
+  model.strategicIcons.subscribe(deferIconList)
 
   var pollLiveGame = function() {
     var findPage = function(pages) {
