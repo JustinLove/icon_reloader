@@ -4,7 +4,7 @@ Provides limited support for shadowed strategic icons in server mods.
 
 By itself, issues a refresh at the start and end of a game.
 
-The mod also supports requests to reallocate the unused icons to new icon ids. It currently considers nine icons unused, so nine custom icons can be requsted, after which further requests will be ignored.
+The mod also supports requests to reallocate the unused icons to new icon ids. It currently considers nine icons unused, so nine custom icons can be requested, after which further requests will be ignored.
 
 ## Bare interface
 
@@ -16,7 +16,7 @@ This will likely be driven by HodgePodge soon.
       atlasMessage.message('icon_atlas', 'update_and_freeze_icon_changes')
     }
 
-There will be a delay before feeze is executed. This is to ensure the page has updated, and to leave room for other mods to make changes. The reason is that **we can only do this once**: as soon as the feeze command is executed, no further updates to the icon atlas are recognized by the engine during the course of the current game.
+There will be a delay before freeze is executed. This is to ensure the page has updated, and to leave room for other mods to make changes. The reason is that **we can only do this once**: as soon as the freeze command is executed, no further updates to the icon atlas are recognized by the engine during the course of the current game.
 
 ## Unused Icons
 
