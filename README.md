@@ -36,7 +36,7 @@ Allocated in the order listed. If you intend to use one of the icons, issuing a 
 
 ## Limits
 
-There must be the stock number of strategic icons, which limits you to 121 (as of 89755)
+There must be the stock number of strategic icons, which limits you to 121 (as of 89755) (or rather, the number present when the engine connects)
 
 Unfortunately, custom shaders in server mods are not loaded.
 

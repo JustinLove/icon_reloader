@@ -75,7 +75,7 @@
       method: method,
       params: params
     }))
-    if (this.ws && this.ws.readystate == 1) {
+    if (this.ws && this.ws.readyState == 1) {
       this.flush()
     }
   }
@@ -124,8 +124,7 @@
   var close = function() {
     mailboxes.forEach(function(mb) {
       if (mb.ws) {
-        mb.ws.close()
-        mb.ws = null
+        mb.close()
       }
     })
   }
