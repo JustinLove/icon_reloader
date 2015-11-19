@@ -48,7 +48,7 @@
   }
 
   handlers.update_and_freeze_icon_changes = function() {
-    model.sendIconList()
+    sendIconListLater()
   }
 
   handlers.reload_icons = function() {
@@ -56,6 +56,13 @@
     $('img').attr('src', function(i, v) {
       return v.split('?')[0] + '?' + Date.now().toString()
     })
+  }
+
+  var sendIconListLater = function() {
+    setTimeout(function() {
+      console.log('sending icons, no more changes will be reflected')
+      model.sendIconList()
+    }, 2000)
   }
 
   var pollLiveGame = function() {
@@ -69,7 +76,7 @@
       } else {
         model.resetCustomIcons()
         handlers.reload_icons()
-        setTimeout(model.sendIconList, 1000)
+        sendIconListLater()
       }
     }
 
