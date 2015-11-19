@@ -13,12 +13,10 @@ This will likely be driven by HodgePodge soon.
     if (atlasMessage) {
       atlasMessage.message('icon_atlas', 'release_icons', ['nuke_launcher', 'anti_nuke_launcher', 'nuke_launcher_ammo', 'anti_nuke_launcher_ammo'])
       atlasMessage.message('icon_atlas', 'request_icons', ['baboom', 'titan_gantry'])
-      setTimeout(function() {
-        atlasMessage.message('icon_atlas', 'update_and_freeze_icon_changes')
-      }, 1000)
+      atlasMessage.message('icon_atlas', 'update_and_freeze_icon_changes')
     }
 
-The timeout leaves room for other mods to request icons. The reason is that we can only do this once: as soon as the feeze command is executed, no further updates to the icon atlas are recognized by the engine during the course of the current game.
+There will be a delay before feeze is executed. This is to ensure the page has updated, and to leave room for other mods to make changes. The reason is that **we can only do this once**: as soon as the feeze command is executed, no further updates to the icon atlas are recognized by the engine during the course of the current game.
 
 ## Unused Icons
 
