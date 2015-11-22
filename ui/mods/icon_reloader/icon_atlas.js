@@ -16,7 +16,7 @@
     'tutorial_titan_commander',
     'metal_spot_preview',
     'avatar',
-    'deep_space_radar',
+    //'deep_space_radar', // see our live_game.js
   ])
 
   model.resetCustomIcons = function() {

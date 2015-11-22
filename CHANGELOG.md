@@ -3,6 +3,7 @@
 ## 1.3.0
 
 - Hook for Icon Extensions mod
+- Leave `deep_space_radar` as used in classic mode
 
 ## 1.2.0
 
