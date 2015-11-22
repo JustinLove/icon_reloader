@@ -6,9 +6,17 @@
     model.stockStrategicIcons = model.strategicIcons().slice(0)
   }
 
+
   model.iconPool = model.iconPool || []
+
+  // two entries, second is used by game
+  var duplicateCommander = model.stockStrategicIcons.filter(function(icon) {
+    return icon == 'commander'
+  }).length > 1
+  if (duplicateCommander) {
+    model.iconPool.push('commander')
+  }
   model.iconPool = model.iconPool.concat([
-    'commander', // two entries, second is used by game
     'energy_storage_adv',
     'metal_storage_adv',
     'tank_lava',

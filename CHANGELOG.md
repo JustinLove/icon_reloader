@@ -4,6 +4,7 @@
 
 - Hook for Icon Extensions mod
 - Leave `deep_space_radar` as used in classic mode
+- Confirm the duplicate `commander` before using it
 
 ## 1.2.0
 
