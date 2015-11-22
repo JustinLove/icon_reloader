@@ -1,5 +1,9 @@
 # Icon Reloader
 
+## 1.3.0
+
+- Hook for Icon Extensions mod
+
 ## 1.2.0
 
 - A delay before freeze is now enforced in the mod, to ensure that it happens relative to message *receipt*, and that the page has time to refresh before the game stops using updates

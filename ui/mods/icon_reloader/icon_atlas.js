@@ -6,7 +6,8 @@
     model.stockStrategicIcons = model.strategicIcons().slice(0)
   }
 
-  model.iconPool = [
+  model.iconPool = model.iconPool || []
+  model.iconPool = model.iconPool.concat([
     'commander', // two entries, second is used by game
     'energy_storage_adv',
     'metal_storage_adv',
@@ -16,7 +17,7 @@
     'metal_spot_preview',
     'avatar',
     'deep_space_radar',
-  ]
+  ])
 
   model.resetCustomIcons = function() {
     model.strategicIcons(model.stockStrategicIcons.slice(0))
