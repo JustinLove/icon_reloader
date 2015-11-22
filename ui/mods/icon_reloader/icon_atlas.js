@@ -75,9 +75,21 @@
     }
     pendingIconList = setTimeout(function() {
       pendingIconList = null
+
+      var unready = 0
+      $('img').each(function() {
+        if (!this.complete) unready++
+      })
+
+      if (unready > 0) {
+        console.log(unready, 'unready')
+        sendIconListLater()
+        return
+      }
+
       console.log('sending icons, no more changes will be reflected')
       model.sendIconList()
-    }, 2000)
+    }, 1000)
   }
 
   // reset timer to ensure page has time to load and repaint

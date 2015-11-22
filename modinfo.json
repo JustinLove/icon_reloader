@@ -8,6 +8,7 @@
   "display_name": "Icon Reloader",
   "forum": "https://forums.uberent.com/threads/rel-server-icon-reloader.70911/",
   "identifier": "com.wondible.pa.icon_reloader",
+  "priority": 40,
   "scenes": {
     "live_game": [
       "coui://ui/mods/icon_reloader/atlas_message.js",

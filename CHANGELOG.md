@@ -5,6 +5,8 @@
 - Hook for Icon Extensions mod
 - Leave `deep_space_radar` as used in classic mode
 - Confirm the duplicate `commander` before using it
+- Change priority to ensure it's loaded for other mods
+- Reflect on image status to ensure load before freeze
 
 ## 1.2.0
 
