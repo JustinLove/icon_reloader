@@ -1,11 +1,12 @@
 (function() {
   console.log('loaded icon atlas')
 
+  var testNoFreeSlots = false
+
   if (!model.stockStrategicIcons) {
     console.log('capture stock strategic icons')
     model.stockStrategicIcons = model.strategicIcons().slice(0)
   }
-
 
   model.iconPool = model.iconPool || []
 
@@ -29,31 +30,108 @@
 
   model.resetCustomIcons = function() {
     model.strategicIcons(model.stockStrategicIcons.slice(0))
-    model.unusedIcons = model.iconPool.slice(0)
+    model.slotUsage = model.strategicIcons().map(function(id) {
+      return [id]
+    })
+    if (!testNoFreeSlots) {
+      model.iconPool.forEach(function(id) {
+        var i = model.strategicIcons().indexOf(id)
+        //console.log('unused?', id, i)
+        if (i > -1) {
+          model.slotUsage[i] = []
+        }
+      })
+    }
+  }
+
+  var assignedIndex = function(id) {
+    for (var index = 0;index < model.slotUsage.length;index++) {
+      var i = model.slotUsage[index].indexOf(id)
+      if (i > -1) return index
+    }
+
+    return -1
+  }
+
+  var emptySlot = function() {
+    for (var i = 0;i < model.slotUsage.length;i++) {
+      if (model.slotUsage[i].length < 1) return i
+    }
+
+    return -1
+  }
+
+  var assign = function(to, i) {
+    var from = model.strategicIcons()[i]
+    console.log('replacing', from, to)
+    model.strategicIcons()[i] = to
+    model.slotUsage[i].push(to)
+  }
+
+  var alias = function(to, i) {
+    var from = model.strategicIcons()[i]
+    console.log('alias', from, to)
+    model.slotUsage[i].push(to)
+  }
+
+  var release = function(to) {
+    model.slotUsage.forEach(function(slot) {
+      var i = slot.indexOf(to)
+      if (i > -1) {
+        slot.splice(i, 1)
+      }
+    })
+  }
+
+  var tryToAssignString = function(to) {
+    var a = assignedIndex(to)
+    if (a > -1) return a
+
+    var e = emptySlot()
+    if (e > -1) {
+      assign(to, e)
+      return e
+    }
+
+    return -1
+  }
+
+  var tryToAssignAlias = function(to, aliases) {
+    for (var i in aliases) {
+      var a = assignedIndex(aliases[i])
+      if (a > -1) {
+        alias(to, a)
+        return a
+      }
+    }
+
+    return -1
+  }
+
+  var tryToAssignObject = function(obj) {
+    var to = Object.keys(obj)[0]
+    var s = tryToAssignString(to)
+    if (s > -1) return s
+
+    return tryToAssignAlias(to, obj[to])
   }
 
   handlers.request_icons = function(icons) {
-    // requested something from our pool
-    model.unusedIcons = _.difference(model.unusedIcons, icons)
-    // already there
-    icons = _.difference(icons, model.strategicIcons())
-
-    while (icons.length > 0 && model.unusedIcons.length > 0) {
-      var to = icons.shift()
-      var from = model.unusedIcons.shift()
-      console.log('replacing', from, to)
-      var i = model.strategicIcons().indexOf(from)
-      model.strategicIcons()[i] = to
-    }
+    _.uniq(icons).forEach(function(to) {
+      if (typeof(to) == 'string') {
+        tryToAssignString(to)
+      } else {
+        tryToAssignObject(to)
+      }
+    })
 
     model.strategicIcons.notifySubscribers()
   }
 
   handlers.release_icons = function(icons) {
-    // can't release things aren't in use
-    icons = _.intersection(icons, model.strategicIcons())
-
-    model.unusedIcons = _.union(model.unusedIcons, icons)
+    if (!testNoFreeSlots) {
+      _.uniq(icons).forEach(release)
+    }
   }
 
   handlers.update_and_freeze_icon_changes = function() {
@@ -68,13 +146,12 @@
     deferIconList()
   }
 
-  var pendingIconList
   var sendIconListLater = function() {
-    if (pendingIconList) {
-      clearTimeout(pendingIconList)
+    if (model.pendingIconList) {
+      clearTimeout(model.pendingIconList)
     }
-    pendingIconList = setTimeout(function() {
-      pendingIconList = null
+    model.pendingIconList = setTimeout(function() {
+      model.pendingIconList = null
 
       var unready = 0
       $('img').each(function() {
@@ -87,14 +164,32 @@
         return
       }
 
-      console.log('sending icons, no more changes will be reflected')
-      model.sendIconList()
+      sendLayered()
     }, 1000)
+  }
+
+  var sendLayered = function() {
+    var list = model.strategicIcons();
+
+    var layers = Math.max.apply(Math, model.slotUsage.map(function(slot) {
+      return slot.length
+    }))
+
+    console.log('sending icons, no more changes will be reflected. layers:', layers)
+    for (var l = layers-1;l >= 0;l--) {
+      model.slotUsage.forEach(function(slot, i) {
+        if (slot[l]) {
+          list[i] = slot[l]
+        }
+      })
+      //console.log(l, list.slice(0))
+      engine.call('handle_icon_list', list, 52);
+    }
   }
 
   // reset timer to ensure page has time to load and repaint
   var deferIconList = function() {
-    if (pendingIconList) {
+    if (model.pendingIconList) {
       sendIconListLater()
     }
   }

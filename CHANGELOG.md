@@ -1,5 +1,9 @@
 # Icon Reloader
 
+## 1.4.0
+
+- Icon aliasing allows fallback to vanilla icon if a slot is unavailable.
+
 ## 1.3.0
 
 - Hook for Icon Extensions mod
