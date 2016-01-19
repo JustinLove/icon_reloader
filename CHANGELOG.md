@@ -1,5 +1,9 @@
 # Icon Reloader
 
+## 1.4.1
+
+- Extend time between changing icons and freezing atlas, we should have at least five seconds before landing.
+
 ## 1.4.0
 
 - Icon aliasing allows fallback to vanilla icon if a slot is unavailable.

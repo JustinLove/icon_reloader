@@ -165,7 +165,7 @@
       }
 
       sendLayered()
-    }, 1000)
+    }, 5000)
   }
 
   var sendLayered = function() {

@@ -1,9 +1,9 @@
 {
   "author": "wondible",
   "build": "89755",
-  "category": ["framework", "strategic-icons"],
+  "category": ["framework", "strategic-icons", "titans"],
   "context": "server",
-  "date": "2015/11/24",
+  "date": "2016/01/19",
   "description": "Provides limited support for shadowed strategic icons in server mods.",
   "display_name": "Icon Reloader",
   "forum": "https://forums.uberent.com/threads/rel-server-icon-reloader.70911/",
@@ -16,6 +16,6 @@
     ]
   },
   "signature": "not yet implemented",
-  "version": "1.4.0"
+  "version": "1.4.1"
 }
 
