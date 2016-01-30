@@ -3,19 +3,22 @@
   "build": "89755",
   "category": ["framework", "strategic-icons", "titans"],
   "context": "server",
-  "date": "2016/01/19",
-  "description": "Provides limited support for shadowed strategic icons in server mods.",
-  "display_name": "Icon Reloader",
+  "date": "2016/01/26",
+  "description": "Obsolete to allow for dependency migration. Formally: Provides limited support for shadowed strategic icons in server mods.",
+  "display_name": "Icon Reloader (Obsolete)",
   "forum": "https://forums.uberent.com/threads/rel-server-icon-reloader.70911/",
   "identifier": "com.wondible.pa.icon_reloader",
   "priority": 40,
   "scenes": {
-    "live_game": [
+    "icon_atlas": [
       "coui://ui/mods/icon_reloader/atlas_message.js",
-      "coui://ui/mods/icon_reloader/live_game.js"
+      "coui://ui/mods/icon_reloader/icon_atlas.js"
+    ],
+    "live_game": [
+      "coui://ui/mods/icon_reloader/atlas_message.js"
     ]
   },
   "signature": "not yet implemented",
-  "version": "1.4.1"
+  "version": "2.0.0"
 }
 
