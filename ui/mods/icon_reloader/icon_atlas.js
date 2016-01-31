@@ -39,6 +39,5 @@
 
   model.strategicIcons.subscribe(model.sendIconList)
 
-  handlers.reload_icons()
   atlasMessage.poll('icon_atlas', 100)
 })()
