@@ -4,38 +4,27 @@
   model.iconPool = model.iconPool || []
   model.strategicIcons(_.uniq(model.strategicIcons()))
 
-  var tryToAssignString = function(to) {
-    model.strategicIcons(_.union(model.strategicIcons(), [to]))
-  }
-
-  var tryToAssignObject = function(obj) {
-    var to = Object.keys(obj)[0]
-    tryToAssignString(to)
-  }
-
   handlers.request_icons = function(icons) {
+    var additions = []
     _.uniq(icons).forEach(function(to) {
       if (typeof(to) == 'string') {
-        tryToAssignString(to)
+        additions.push(to)
       } else {
-        tryToAssignObject(to)
+        additions.push(Object.keys(to)[0])
       }
     })
 
-    model.strategicIcons.notifySubscribers()
+    model.strategicIcons(_.union(model.strategicIcons(), additions))
   }
 
   handlers.release_icons = function(icons) {}
 
   handlers.update_and_freeze_icon_changes = function() {
-    model.sendIconList()
+    setTimeout(model.sendIconList, 5000)
   }
 
   handlers.reload_icons = function() {
-    console.log('reload icons')
-    $('img').attr('src', function(i, v) {
-      return v.split('?')[0] + '?' + Date.now().toString()
-    })
+    api.file.mountMemoryFiles({})
   }
 
   model.strategicIcons.subscribe(model.sendIconList)
