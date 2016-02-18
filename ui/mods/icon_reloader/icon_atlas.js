@@ -2,9 +2,10 @@
   console.log('loaded icon atlas')
 
   model.iconPool = model.iconPool || []
+  model.strategicIcons(_.uniq(model.strategicIcons()))
 
   var tryToAssignString = function(to) {
-    model.strategicIcons.push(to)
+    model.strategicIcons(_.union(model.strategicIcons(), [to]))
   }
 
   var tryToAssignObject = function(obj) {
