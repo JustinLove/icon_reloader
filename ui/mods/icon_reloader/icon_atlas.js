@@ -63,14 +63,14 @@
 
   var assign = function(to, i) {
     var from = model.strategicIcons()[i]
-    console.log('replacing', from, to)
+    //console.log('replacing', from, to)
     model.strategicIcons()[i] = to
     model.slotUsage[i].push(to)
   }
 
   var alias = function(to, i) {
     var from = model.strategicIcons()[i]
-    console.log('alias', from, to)
+    //console.log('alias', from, to)
     model.slotUsage[i].push(to)
   }
 
@@ -165,7 +165,7 @@
       }
 
       sendLayered()
-    }, 5000)
+    }, 8000)
   }
 
   var sendLayered = function() {
