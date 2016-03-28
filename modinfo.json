@@ -1,9 +1,9 @@
 {
   "author": "wondible",
-  "build": "89755",
+  "build": "89755-patch",
   "category": ["framework", "strategic-icons", "titans"],
   "context": "server",
-  "date": "2016/01/26",
+  "date": "2016/03/27",
   "description": "Obsolete to allow for dependency migration. Formally: Provides limited support for shadowed strategic icons in server mods.",
   "display_name": "Icon Reloader (Obsolete)",
   "forum": "https://forums.uberent.com/threads/rel-server-icon-reloader.70911/",

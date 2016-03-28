@@ -1,5 +1,11 @@
 # Icon Reloader
 
+## 2.0.0 for > 89755
+
+This mod is obsolete and should be removed from mod dependencies. This is a stub release to keep current dependents working.
+
+If you were using Hodgepodge, v2.0.0 handles strategic icons internally. If not, icon mods are now trivial (see readme)
+
 ## 1.4.2
 
 - Increase activation timeout to favor blip errors over no-icon errors.
