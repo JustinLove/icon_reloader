@@ -1,5 +1,9 @@
 # Icon Reloader
 
+## 1.4.2
+
+- Increase activation timeout to favor blip errors over no-icon errors.
+
 ## 1.4.1
 
 - Extend time between changing icons and freezing atlas, we should have at least five seconds before landing.
